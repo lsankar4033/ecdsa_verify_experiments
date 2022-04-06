@@ -4,17 +4,27 @@ import styles from "../styles/Home.module.css";
 
 import type { NextPage } from "next";
 
-import { prepareInput, calculateProof } from "../lib/util";
+import { prepareInput, calculateProof, verifyProof } from "../lib/util";
 
 const Home: NextPage = () => {
   async function testProofGen() {
     const input = await prepareInput();
+    const inputT = performance.now();
     console.log("input:");
     console.log(input);
 
     const { proof, publicSignals } = await calculateProof(input);
+    const proofT = performance.now();
+    console.log(`took ${proofT - inputT} ms`);
     console.log("proof:");
     console.log(proof);
+
+    const res = await verifyProof(proof, publicSignals);
+    const verifyT = performance.now();
+
+    console.log(`took ${verifyT - proofT} ms`);
+    console.log(`Verify result:`);
+    console.log(res);
   }
 
   return (

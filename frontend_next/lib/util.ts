@@ -81,3 +81,12 @@ export const calculateProof = async function (input: any) {
     publicSignals,
   };
 };
+
+export const verifyProof = async function (proof, publicSignals) {
+  const vkey = await snarkjs.zKey.exportVerificationKey(
+    "./ECDSAVerifyNoPubkeyCheck_64-4_prod.0.zkey"
+  );
+
+  const res = await snarkjs.groth16.verify(vkey, publicSignals, proof);
+  return res;
+};
